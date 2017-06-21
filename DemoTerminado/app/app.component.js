@@ -31,6 +31,7 @@ System.register(['angular2/core', 'rxjs/Rx', './app.chucknorris.service', 'angul
             AppComponent = (function () {
                 function AppComponent(chuckNorrisService) {
                     this.chuckNorrisService = chuckNorrisService;
+                    this.jokes = [];
                     this.createSubscription();
                 }
                 AppComponent.prototype.cancelSubscription = function () {
@@ -52,13 +53,16 @@ System.register(['angular2/core', 'rxjs/Rx', './app.chucknorris.service', 'angul
                             var observable = Rx_1.Observable.forkJoin(_this.chuckNorrisService.getInfo(searchTerm), _this.chuckNorrisService.getUsers());
                             return observable;
                         });
-                        this.subscripcion = this.keysup.subscribe(function (data) { return console.log(data); });
+                        this.subscripcion = this.keysup.subscribe(function (data) {
+                            console.log(data);
+                            _this.jokes = data[0].result;
+                        });
                     }
                 };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n        <input id=\"search\" type=\"text\" class=\"form-control\">\n        <button class=\"btn btn-primary\" (click)=\"cancelSubscription()\">Cancelar subscripci\u00F3n</button>\n        <button class=\"btn btn-default\" (click)=\"createSubscription()\">Crear subscripci\u00F3n</button>\n    ",
+                        template: "\n        <input id=\"search\" type=\"text\" class=\"form-control\">\n        <button class=\"btn btn-primary\" (click)=\"cancelSubscription()\">Cancelar subscripci\u00F3n</button>\n        <button class=\"btn btn-default\" (click)=\"createSubscription()\">Crear subscripci\u00F3n</button>\n        <div *ngIf='jokes.length !== 0'>\n            <h1>Jokes</h1>\n            <div *ngFor='#joke of jokes'>{{ joke.value }}</div> \n        </div>\n    ",
                         providers: [app_chucknorris_service_1.ChuckNorrisService, http_1.HTTP_PROVIDERS]
                     }), 
                     __metadata('design:paramtypes', [app_chucknorris_service_1.ChuckNorrisService])

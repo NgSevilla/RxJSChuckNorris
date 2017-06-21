@@ -11,12 +11,18 @@ import { HTTP_PROVIDERS } from 'angular2/http';
         <input id="search" type="text" class="form-control">
         <button class="btn btn-primary" (click)="cancelSubscription()">Cancelar subscripción</button>
         <button class="btn btn-default" (click)="createSubscription()">Crear subscripción</button>
+        <div *ngIf='jokes.length !== 0'>
+            <h1>Jokes</h1>
+            <div *ngFor='#joke of jokes'>{{ joke.value }}</div> 
+        </div>
     `,
     providers: [ ChuckNorrisService , HTTP_PROVIDERS ]
 })
 export class AppComponent {
     public keysup: any;
     public subscripcion: any;
+    public jokes: Array<any> = [];
+
     constructor(private chuckNorrisService: ChuckNorrisService) {
         this.createSubscription();
     }
@@ -43,7 +49,10 @@ export class AppComponent {
                 return observable;
             })
                             
-            this.subscripcion = this.keysup.subscribe(data => console.log(data));
+            this.subscripcion = this.keysup.subscribe(data => {
+                console.log(data);
+                this.jokes = data[0].result;
+            });
         }
     }
 }
